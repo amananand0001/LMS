@@ -9,7 +9,7 @@ A production-quality Learning Management System (LMS) built with **React Native 
 ### 🎥 App Walkthrough Video
 
 <p align="center">
-  <video src="assets/screenshots/walkthrough.mp4" width="320" controls></video>
+  <iframe src="https://drive.google.com/file/d/12CKF-Vi9pbGdVVSiqqR7IfxHm3sVPsx7/preview" width="320" height="240" allowfullscreen></iframe>
 </p>
 
 ### 📸 Screenshots
