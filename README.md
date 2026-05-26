@@ -1,56 +1,194 @@
-# Welcome to your Expo app 👋
+# LearnHub — Mini LMS Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A production-quality Learning Management System (LMS) built with **React Native Expo** as part of a technical assignment. Demonstrates native features, WebView integration, state management, and performance optimization.
 
-## Get started
+---
 
-1. Install dependencies
+## 📱 Screenshots
 
-   ```bash
-   npm install
-   ```
+> Auth, Course Catalog, Course Detail, WebView Content, Profile
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 🚀 Features
 
-In the output, you'll find options to open the app in a
+### Part 1 — Authentication
+- Login / Register via `https://api.freeapi.app/api/v1/users`
+- Auth tokens stored in **Expo SecureStore**
+- Auto-login on restart via token hydration
+- Token refresh on 401 with queued request replay
+- Avatar upload via camera roll
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Part 2 — Course Catalog
+- Courses from `/public/randomproducts` + instructors from `/public/randomusers`
+- Pull-to-refresh, search bar, All / Bookmarked filter tabs
+- Bookmark toggle persisted to **AsyncStorage**
+- Memoized `FlatList` with `getItemLayout`, `removeClippedSubviews`
+- Course detail screen with full info, instructor card, star rating
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Part 3 — WebView Integration
+- Local HTML template rendered in `WebView`
+- **Native → WebView**: `injectedJavaScript` sends user session data on load
+- **WebView → Native**: `postMessage` handles `ENROLL`, `BOOKMARK`, `QUIZ_START` actions
+- Load progress bar, reload button, error recovery UI
 
-## Get a fresh project
+### Part 4 — Local Notifications
+- Notification permission request on first launch
+- Milestone notifications at 5, 10, and 20 bookmarks (deduplicated via AsyncStorage)
+- 24-hour inactivity reminder scheduled on app background, cancelled on foreground
+- Android notification channels (`lms-general`, `lms-reminders`)
+- Tap notification → navigate to Courses tab
 
-When you're ready, run:
+### Part 5 — State Management
+- **Zustand** for all state (`authStore`, `courseStore`, `appStore`, `networkStore`)
+- Sensitive data (tokens) → **Expo SecureStore**
+- Bookmarks + preferences → **AsyncStorage** (via Zustand `persist` middleware)
+- Granular per-field selectors to prevent unnecessary re-renders
+
+### Part 6 — Error Handling
+- Axios retry interceptor: 3 retries with exponential backoff (400ms × n)
+- 10-second request timeout
+- Offline mode amber banner via `@react-native-community/netinfo`
+- WebView error state with "Try Again" reload button
+- Normalized API error messages
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | React Native + Expo SDK 56 |
+| Language | TypeScript (strict mode) |
+| Navigation | Expo Router (file-based) |
+| State | Zustand |
+| API | Axios + interceptors |
+| Secure Storage | expo-secure-store |
+| Async Storage | @react-native-async-storage/async-storage |
+| Notifications | expo-notifications |
+| WebView | react-native-webview |
+| Images | expo-image (with disk+memory cache) |
+| Icons | @expo/vector-icons (Ionicons) |
+| Network | @react-native-community/netinfo |
+
+---
+
+## ⚙️ Setup Instructions
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- Expo CLI (`npm install -g expo-cli`)
+- Android Studio (for Android emulator) or a physical device
+
+### Install & Run
 
 ```bash
-npm run reset-project
+# Clone the repo
+git clone <repo-url>
+cd LMS
+
+# Install dependencies
+npm install
+
+# Run on Android (development build)
+npx expo run:android
+
+# Run on iOS (development build)
+npx expo run:ios
+
+# Start Metro bundler only (requires existing development build)
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+> **Note**: This app uses `expo-notifications` which requires a **development build** (not Expo Go) on Android due to SDK 53+ restrictions on push notification APIs.
 
-### Other setup steps
+### Environment Variables
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+No `.env` file is required. The API base URL is configured directly in `src/services/api.ts`:
 
-## Learn more
+```ts
+const BASE_URL = 'https://api.freeapi.app/api/v1';
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+---
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 📁 Project Structure
 
-## Join the community
+```
+src/
+├── app/                    # Expo Router screens
+│   ├── (auth)/             # Login, Register, Forgot Password
+│   ├── (main)/             # Home, Courses, Profile tabs
+│   ├── course/[id].tsx     # Course detail screen
+│   ├── course-content/[id].tsx  # WebView content screen
+│   └── _layout.tsx         # Root layout (notifications, network)
+├── assets/
+│   └── courseHtmlTemplate.ts   # HTML template for WebView
+├── components/
+│   ├── CourseCard.tsx      # Memoized course list item
+│   ├── OfflineBanner.tsx   # Network status banner
+│   └── ui/                 # Avatar, Button, Input, SearchBar, LoadingOverlay
+├── constants/
+│   └── theme.ts            # Design tokens (colors, spacing, typography)
+├── services/
+│   ├── api.ts              # Axios instance, interceptors, endpoints
+│   └── notifications.ts    # Local notification service
+├── store/
+│   ├── authStore.ts        # Authentication state
+│   ├── courseStore.ts      # Courses + bookmarks
+│   ├── appStore.ts         # Preferences + onboarding
+│   └── networkStore.ts     # Network connectivity
+└── types/
+    ├── auth.ts             # Auth type definitions
+    └── course.ts           # Course type definitions
+```
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 🏗️ Key Architectural Decisions
+
+### 1. Zustand over Redux
+Minimal boilerplate, no `Provider` wrapper, excellent TypeScript inference, and built-in `persist` middleware for AsyncStorage.
+
+### 2. Granular Zustand Selectors
+Each component subscribes to exactly the slice it needs (`useCourseStore((s) => s.courses)`) rather than the whole store object. This prevents re-renders when unrelated state changes.
+
+### 3. Single Source of Truth for Bookmarks
+Bookmarks live exclusively in `courseStore` (AsyncStorage). `appStore` manages only preferences and onboarding flags.
+
+### 4. expo-notifications Sub-module Import
+To avoid the Expo Go Android crash (`expo-notifications` SDK 53+ blocks remote push registration), notifications are loaded via specific internal sub-module `require()` calls wrapped in `try/catch`. This allows local notifications to work in both Expo Go (iOS) and development builds (Android).
+
+### 5. WebView Communication Pattern
+- **Native → WebView**: `injectedJavaScript` runs on page load and injects `window.COURSE_DATA` with user session info, dispatching a `NativeReady` custom event.
+- **WebView → Native**: HTML buttons call `window.ReactNativeWebView.postMessage(JSON.stringify({ type, courseId }))`, handled by `onMessage`.
+
+### 6. Retry Interceptor Design
+The retry interceptor fires **before** the 401 handler. Only network errors (no response) and 5xx server errors are retried. 4xx client errors and 401s are handled by their specific logic paths.
+
+---
+
+## ⚠️ Known Issues / Limitations
+
+1. **Notifications on Android require a development build** — `expo-notifications` dropped Expo Go support in SDK 53+. Run `npx expo run:android` to get full notification support.
+2. **Enroll Now** — enrollment is simulated (Alert confirmation + navigate to content). There is no enrollment API in `api.freeapi.app`.
+3. **Course progress** — "Completed" count is hardcoded to 0. No completion-tracking API is available.
+4. **WebView content** — Course content is rendered from a local HTML template, not a remote URL, since the assignment doesn't provide a real course content API.
+
+---
+
+## 📦 APK Build
+
+```bash
+# Install EAS CLI
+npm install -g eas-cli
+
+# Login to Expo
+eas login
+
+# Build APK (development build)
+eas build --platform android --profile development
+```
+
+APK is available in the [Releases](../../releases) section.
