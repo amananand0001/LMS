@@ -4,9 +4,23 @@ A production-quality Learning Management System (LMS) built with **React Native 
 
 ---
 
-## 📱 Screenshots
+## 📱 App Demo & Screenshots
 
-> Auth, Course Catalog, Course Detail, WebView Content, Profile
+### 🎥 App Walkthrough Video
+
+<p align="center">
+  <video src="assets/screenshots/walkthrough.mp4" width="320" controls></video>
+</p>
+
+### 📸 Screenshots
+
+| Login & Register | Course Catalog | Course Bookmarks |
+| :-: | :-: | :-: |
+| <img src="assets/screenshots/screen_1.jpeg" width="220" alt="Login & Registration" /> | <img src="assets/screenshots/screen_2.jpeg" width="220" alt="Course Catalog" /> | <img src="assets/screenshots/screen_3.jpeg" width="220" alt="Bookmarked Courses" /> |
+
+| Course Details | WebView Content | Profile / Settings | Notifications |
+| :-: | :-: | :-: | :-: |
+| <img src="assets/screenshots/screen_4.jpeg" width="180" alt="Course Details" /> | <img src="assets/screenshots/screen_5.jpeg" width="180" alt="WebView Native Integration" /> | <img src="assets/screenshots/screen_6.jpeg" width="180" alt="User Profile" /> | <img src="assets/screenshots/screen_7.jpeg" width="180" alt="Local Notifications" /> |
 
 ---
 
