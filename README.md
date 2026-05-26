@@ -9,7 +9,9 @@ A production-quality Learning Management System (LMS) built with **React Native 
 ### 🎥 App Walkthrough Video
 
 <p align="center">
-  <iframe src="https://drive.google.com/file/d/12CKF-Vi9pbGdVVSiqqR7IfxHm3sVPsx7/preview" width="320" height="240" allowfullscreen></iframe>
+  <a href="https://drive.google.com/file/d/12CKF-Vi9pbGdVVSiqqR7IfxHm3sVPsx7/view?usp=sharing" target="_blank">
+    <img src="https://img.shields.io/badge/PLAY_WALKTHROUGH_VIDEO-Google_Drive-red?style=for-the-badge&logo=google-drive&logoColor=white" alt="Play Walkthrough Video" height="45" />
+  </a>
 </p>
 
 ### 📸 Screenshots
