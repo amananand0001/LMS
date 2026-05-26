@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "LMS",
-    "slug": "LMS",
+    "slug": "lms",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -48,6 +48,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "551ac1bb-f989-4c5d-b6d3-1c6f18b65285"
+      }
+    },
+    "owner": "aman1038"
   }
 }
